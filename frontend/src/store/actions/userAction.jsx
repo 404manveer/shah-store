@@ -17,3 +17,44 @@ export const userRegisteration = createAsyncThunk(
     }
   }
 );
+
+export const userloging = createAsyncThunk(
+  "user/login",
+  async (user,{rejectWithValue}) =>{
+    try {
+      const res = await api.post("/api/auth/login", user);
+      console.log("userlogin>>>>",res.data);
+      return res.data;
+      
+      
+    } catch (error) {
+      console.log("error from useraction while login",error);
+      return rejectWithValue(error.response?.data)
+      
+      
+    }
+  }
+)
+
+export const checkauth = createAsyncThunk(
+  "user/checkauth",
+  async()=>{
+    try {
+      const res = await api.get("/api/auth/check-auth",{
+        withCredentials:true,
+        headers:{
+          "cache-control":"no-store,on-cache,proxy-revalidate,must-revalidate"
+        }
+      });
+      console.log("checkauth.>>>>>",res.data);
+      return res.data
+
+      
+      
+    } catch (error) {
+      console.log("error from checkuath action from useraction",error);
+      
+      
+    }
+  }
+)

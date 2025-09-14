@@ -6,6 +6,7 @@ import {Button}  from '../components/ui/button'
 import {useNavigate } from 'react-router-dom'
 import {useDispatch} from 'react-redux'
 import {toast} from "sonner"
+import { userloging } from '../store/actions/userAction'
 
 const Register = () => {
     const {register,reset,handleSubmit, watch,formState:{errors}} = useForm()
@@ -16,10 +17,18 @@ const Register = () => {
 
     const registation =(data)=>{
         console.log('Form data',data);
+        dispatch(userloging(data)).then((data)=>{
+
+          console.log("login user>>>>>>",data);
+          if(data.payload?.success){
+            toast.success(data.payload.user.name,data.payload.message)
+            navigate('/')
+          }
+          
+        })
+        // toast.success('user creater succesfully')
 
         
-        toast.success('user creater succesfully')
-        navigate('/')
     
         
 
@@ -43,7 +52,7 @@ const Register = () => {
       </div>
 
       <Button className='text-white' type='submit' >login</Button>
-      <span>don't have account. <a href="/register">Create now</a></span>
+      <span className=' text-center ' >don't have account. <a href="/register" className='text-blue-800 underline  ' >Create now</a></span>
         
         
 
