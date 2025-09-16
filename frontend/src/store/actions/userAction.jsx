@@ -42,9 +42,9 @@ export const checkauth = createAsyncThunk(
     try {
       const res = await api.get("/api/auth/check-auth",{
         withCredentials:true,
-        headers:{
-          "cache-control":"no-store,on-cache,proxy-revalidate,must-revalidate"
-        }
+        // headers:{
+        //   "cache-control":"no-store,on-cache,proxy-revalidate,must-revalidate"
+        // }
       });
       console.log("checkauth.>>>>>",res.data);
       return res.data

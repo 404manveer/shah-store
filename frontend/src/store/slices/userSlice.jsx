@@ -1,11 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { checkauth, userloging, userRegisteration } from "../actions/userAction";
+import {
+  checkauth,
+  userloging,
+  userRegisteration,
+} from "../actions/userAction";
 
 const initialState = {
   user: null,
   isLoading: false,
   error: null,
-  isAuthenticate:null
+  isAuthenticate: false,
 };
 
 const userSlice = createSlice({
@@ -15,50 +19,52 @@ const userSlice = createSlice({
     loaduser: (state, actions) => {
       state.user = actions.payload;
     },
-    
   },
-  extraReducers:(builder)=>{
-        builder.addCase(userRegisteration.pending,(state)=>{
-            state.isLoading= true
-        })
-        .addCase(userRegisteration.fulfilled,(state,actions)=>{
-            state.isLoading= false
-            state.user= actions.payload?.success ? actions.payload: null
-            state.isAuthenticate=false
-        })
-         .addCase(userRegisteration.rejected, (state, action) => {
+  extraReducers: (builder) => {
+    builder
+      .addCase(userRegisteration.pending, (state) => {
+        state.isLoading = true;
+        state.isAuthenticate = false;
+      })
+      .addCase(userRegisteration.fulfilled, (state, actions) => {
+        state.isLoading = false;
+        state.user = actions.payload?.success ? actions.payload : null;
+        state.isAuthenticate = false;
+      })
+      .addCase(userRegisteration.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-        state.isAuthenticate=false
+        state.isAuthenticate = false;
       })
-      .addCase(userloging.pending,(state)=>{
-            state.isLoading= true
-        })
-        .addCase(userloging.fulfilled,(state,actions)=>{
-            state.isLoading= false
-            state.user=actions.payload?.success ? actions.payload: null
-            state.isAuthenticate=true
-        })
-         .addCase(userloging.rejected, (state, action) => {
+      .addCase(userloging.pending, (state) => {
+        state.isAuthenticate = false;
+        state.isLoading = true;
+      })
+      .addCase(userloging.fulfilled, (state, actions) => {
+        state.isLoading = false;
+        state.user = actions.payload.success ? actions.payload : null;
+        state.isAuthenticate = true;
+      })
+      .addCase(userloging.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-        state.isAuthenticate=false
+        state.isAuthenticate = false;
       })
-      .addCase(checkauth.pending,(state)=>{
-            state.isLoading= true
-        })
-        .addCase(checkauth.fulfilled,(state,actions)=>{
-            state.isLoading= false
-            state.user= actions.payload?.success ? actions.payload: null
-            state.isAuthenticate=true
-        })
-         .addCase(checkauth.rejected, (state, action) => {
+      .addCase(checkauth.pending, (state) => {
+        state.isLoading = true;
+        state.isAuthenticate = false;
+      })
+      .addCase(checkauth.fulfilled, (state, actions) => {
+        state.isLoading = false;
+        state.user = actions.payload?.success ? actions.payload : null;
+        state.isAuthenticate = true;
+      })
+      .addCase(checkauth.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-        state.isAuthenticate=false
-      })
-    }
-
+        state.isAuthenticate = false;
+      });
+  },
 });
 
 export const { loaduser } = userSlice.actions;

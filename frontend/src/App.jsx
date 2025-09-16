@@ -6,9 +6,9 @@ import { checkauth } from './store/actions/userAction'
 
 const App = () => {
   const dispatch = useDispatch((state)=>state.user)
-  // useEffect(()=>{
-  //   dispatch(checkauth())
-  // },[dispatch])
+  useEffect(()=>{
+    dispatch(checkauth())
+  },[dispatch])
   return (
       <MainRoutes/>
   )

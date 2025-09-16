@@ -32,12 +32,12 @@ const userlogin = async (req, res) => {
     if (!existuser) {
       return res.json({
         success: false,
-        message: "eamil doen't exist,",
+        message: "email doen't exist,",
       });
     }
     const passwordMatch = await bcrypt.compare(password, existuser.password);
     if (!passwordMatch) {
-      return res.jsom({
+      return res.json({
         success: false,
         message: "invaild password. please try again",
       });
@@ -52,8 +52,9 @@ const userlogin = async (req, res) => {
       process.env.JWT_KEY,
       { expiresIn: "60m" }
     );
+    console.log("Generated token:", token);
 
-    res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "None"   }).json({
+    res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "Lax",maxAge: 60 * 60 * 1000,   }).json({
       success: true,
       message: "Logged in succesfully",
       user: {
@@ -76,7 +77,7 @@ const userLogout = async (req,res)=>{
 }
 
 const authMiddleware = async(req,res,next)=>{
-    const token = req.cookie?.token;
+    const token = req.cookies?.token;   
     if(!token) return res.status(401).json({
               success:false,
               message:"unauthorized user"
