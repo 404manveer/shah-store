@@ -5,17 +5,15 @@ import Header from './Header'
 
 const  Adimlayout = () => {
   return (
-    <section>
+    <section className='flex flex-1  ' >
       <Sidebar/>
-        <div>
+        <div className= 'flex flex-1 flex-col ' >
             {/* header */}
             <Header/>
-            <main>
-                <div className='w-full  ' >
+            <main className=' flex flex-1 '>
                     admin-view
                 <Outlet/>
 
-                </div>
             </main>
         </div>
     </section>

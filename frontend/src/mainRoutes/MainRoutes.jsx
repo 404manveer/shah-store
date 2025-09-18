@@ -11,24 +11,27 @@ import Listing from "../pages/shopping-view/Listing";
 import Adminlayout from "../components/admin-view/Adminlayout"
 import Dashboard from "../pages/admin-view/Dashboard"
 import Products from "../pages/admin-view/Product"
+import Order from "../pages/admin-view/Order"
 
 const MainRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Shoppinglayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/Account" element={<Account />} />
-        <Route path="/Listing" element={<Listing />} />
+        <Route index element={<Home />} />
+        {/* <Route path="/products" element={<Products />} /> */}
+        <Route path="checkout" element={<Checkout />} />
+        <Route path="Account" element={<Account />} />
+        <Route path="Listing" element={<Listing />} />
       </Route>
-      <Route path="/" element={<AuthLayout />}>
+      <Route path="/auth" element={<AuthLayout />}>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
       </Route>
-      <Route path="/" element={<Adminlayout.jsx/>}  >
-      <Route path="/dashboard " element={<Dashboard/>}/>
-      <Route path="/products " element={<Products/>}/>
+      <Route path="/admin" element={<Adminlayout/>}  >
+      <Route path="dashboard" element={<Dashboard/>}/>
+      <Route path="products" element={<Products/>}/>
+      <Route path="order" element={<Order/>}/>
+      
 
       </Route>
     </Routes>
