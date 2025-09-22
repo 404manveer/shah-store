@@ -1,5 +1,6 @@
 const express = require('express');
 const authRoutes = require('./routers/auth.routers');
+const adminproductImageupload = require('./routers/admin/product.router')
 const cors = require('cors')
 const cookieparser = require('cookie-parser')
 
@@ -20,7 +21,8 @@ app.use(cors({
 
 
  
-app.use('/api/auth',authRoutes)   
+app.use('/api/auth',authRoutes)  
+app.use('/api/admin/product',adminproductImageupload) 
 
 
 module.exports = app; 

@@ -1,24 +1,33 @@
+"use client"
+import { Outlet } from "react-router-dom"
+import Sidebar from "./Sidebar"
+import Header from "./Header"
+import { useState } from "react"
 
-import { Outlet } from 'react-router-dom'
-import Sidebar from './Sidebar'
-import Header from './Header'
+const Adminlayout = () => {
+  const [open, setopen] = useState(false)
 
-const  Adimlayout = () => {
   return (
-    <section className='flex flex-1  ' >
-      <Sidebar/>
-        <div className= 'flex flex-1 flex-col ' >
-            {/* header */}
-            <Header/>
-            <main className=' flex flex-1 '>
-                    admin-view
-                <Outlet/>
+    <section className="flex h-screen w-screen overflow-hidden">
+      {/* Sidebar (fixed width, full height) */}
+      <aside className="w-64 h-screen fixed left-0 top-0 border-r bg-white">
+        <Sidebar open={open} setopen={setopen} />
+      </aside>
 
-            </main>
-        </div>
+      {/* Main content (shifted right by sidebar width) */}
+      <div className="flex flex-1 flex-col ml-64">
+        {/* Header (fixed height) */}
+        <header className="h-14 border-b bg-white sticky top-0 z-10">
+          <Header setopen={setopen} />
+        </header>
+
+        {/* Page content fills remaining space */}
+        <main className="flex-1  p-4 bg-gray-50">
+          <Outlet />
+        </main>
+      </div>
     </section>
-
-)
+  )
 }
 
-export default Adimlayout
+export default Adminlayout
