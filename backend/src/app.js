@@ -25,4 +25,4 @@ app.use('/api/auth',authRoutes)
 app.use('/api/admin/product',adminproductImageupload) 
 
 
-module.exports = app; 
+module.exports = app;  

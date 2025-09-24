@@ -39,7 +39,7 @@ const Sidebar = ({ open, setopen }) => {
 
   function Menu() {
     const location= useLocation()
-    console.log(location.pathname);
+    
     
     return (
       <nav className=" mt-10 flex flex-col gap-6 ">
@@ -58,7 +58,7 @@ const Sidebar = ({ open, setopen }) => {
   }
   return (
     <Fragment>
-      <aside className="  border-r h-screen p-6     hidden lg:flex flex-col ">
+      <aside className="  fixed w-64 bg-white  border-r h-screen p-6     hidden lg:flex flex-col ">
         <div
           onClick={() => navigate("/admin")}
           className=" flex gap-2 items-center  cursor-pointer "

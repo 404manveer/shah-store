@@ -3,17 +3,25 @@ import { Label } from "../ui/label";
 import { CloudUploadIcon, FileIcon, XIcon } from "lucide-react";
 import { useEffect } from "react";
 import {api} from "../../api/axiosconfig"
+import{Skeleton} from "../../components/ui/skeleton"
+import { useRef } from "react";
 
 const ImageUploadFile = ({
   ImageFile,
   setImageFile,
   ImageFileUrl,
   setImageFileUrl,
+  setimageloading,
+  imageloading,
+  isEditMode,
 }) => {
+  console.log("editmode>>>",isEditMode);
+  
+  const refinp = useRef(null)
   const handleimageupload = (event) => {
     event.preventDefault();
     const file = event.target.files?.[0]
-    if(file){console.log(file);}
+    if(file){console.log("image>>>>>",file);}
     
     setImageFile(file);
   };
@@ -31,23 +39,42 @@ const handleDrop =(e)=>{
 const handleRemove = (e)=>{
     e.preventDefault()
     setImageFile(null)
+    setImageFileUrl(null)
+    console.log("remove",ImageFile);
+    console.log("remove",ImageFileUrl);
+   if(refinp.current) refinp.current.value="";
+    
 }
 
 async function UploadImageCloundinary() {
+  setimageloading(true)
   const data = new FormData()
+  console.log("formdata imgage>>>",data);
+  
   data.append("MY_file",ImageFile)
-  const response =await api.post("/api/admin/product/upload-image",data)
-  if(response.data.success)setImageFileUrl(response.data.url)
-    console.log("re>>>>",response);
-    
-    console.log(response.url);
+  console.log("after append......",data);
+  
+  const response =await api.post("/api/admin/product/upload-image",data).then(
+    (data)=>{
+      console.log("gettingimageurl>>>>>",data);
+      
+       if(data.data.success){setImageFileUrl(data.data.url)
+    setimageloading(false)
+  console.log(imageloading,isEditMode);
+  
+  }
+    }
+  )
+ 
+   
     
   
 }
 
 useEffect(()=>{
-  if(ImageFile !==null) UploadImageCloundinary()
-})
+  if(ImageFile || !isEditMode) UploadImageCloundinary()
+},[ImageFile])
+if(isEditMode && ImageFileUrl ) {setimageloading(false)}
 
   return (
     <div className="  " >
@@ -59,15 +86,13 @@ useEffect(()=>{
           id="image-upload"
           className="hidden"
           onChange={handleimageupload}
+          ref={refinp}
         />
          {ImageFile? (
+           imageloading? <Skeleton className="bg-gray-200 w-[6rem] h-[10rem] " /> :
             <div className="overflow-hidden border-4 w-full h-full relative  flex  justify-between" >
                   <img src={ImageFileUrl} alt="img"  className=" w-full h-full object-cover object-center" />
                   <XIcon onClick={handleRemove} className=" absolute top-0 right-0 " />
-               
-            {/* <FileIcon/> 
-            <span>{ImageFile.name}</span>
-            <XIcon onClick={handleRemove} /> */}
             </div>
          ):( <label htmlFor="image-upload" onDragOver={handleDragOver} onDrop={handleDrop} className="flex flex-col items-center justify-center"  >
          <CloudUploadIcon size={50} />
