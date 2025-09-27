@@ -35,6 +35,22 @@ export const userloging = createAsyncThunk(
     }
   }
 )
+export const userLogout = createAsyncThunk(
+  "user/logout",
+  async()=>{
+    try {
+      const res = await api.get("/api/auth/logout")
+      console.log("action logout",res);
+      
+      return res
+      
+    } catch (error) {
+      console.log(error);
+      
+      
+    }
+  }
+)
 
 export const checkauth = createAsyncThunk(
   "user/checkauth",
@@ -46,7 +62,6 @@ export const checkauth = createAsyncThunk(
         //   "cache-control":"no-store,on-cache,proxy-revalidate,must-revalidate"
         // }
       });
-      console.log("checkauth.>>>>>",res.data);
       return res.data
 
       

@@ -10,7 +10,9 @@ const App = () => {
     dispatch(checkauth())
   },[dispatch])
   return (
-      <MainRoutes/>
+     <div className='w-[100%] h-[100%] ' >
+       <MainRoutes/>
+     </div>
   )
 }
 

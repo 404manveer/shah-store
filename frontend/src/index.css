@@ -9,7 +9,7 @@
     @apply box-border p-0 m-0 ;
   }
   .container{
-    @apply max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px] 2xl:max-w-[1320px] max-sm:px-4 mx-auto;
+    @apply max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px] 2xl:max-w-[1320px] max-sm:px-4  mx-auto;
   }
 
   .theme-transition-3{

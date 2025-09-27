@@ -5,12 +5,12 @@ import { Outlet } from 'react-router-dom'
 
 export default function Shoppinglayout () {
   return (
-  <section>
+  <section className='  ' >
     <Header/>
-    <main>
-     shopping
+    <main className='h-screen ' >
         <Outlet/>
     </main>
+
     <Footer/>
   </section>
   )

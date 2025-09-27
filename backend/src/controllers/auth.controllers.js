@@ -58,7 +58,7 @@ const userlogin = async (req, res) => {
       success: true,
       message: "Logged in succesfully",
       user: {
-        name: existuser.username,
+        username: existuser.username,
         email: existuser.email,
         role: existuser.role,
         id: existuser._id,
@@ -70,10 +70,24 @@ const userlogin = async (req, res) => {
 };
 
 const userLogout = async (req,res)=>{
-    res.clearcookie("token").status(200).json({
+
+   const token = req.cookies?.token;   
+    if(!token) return res.status(401).json({
+              success:false,
+              message:"unauthorized user"
+    })
+  try {
+   
+      res.clearCookie("token").status(200).json({
       success:true,
         message:"logout successfully"
     })
+    
+  } catch (error) {
+    console.log(error);
+    
+    
+  }
 }
 
 const authMiddleware = async(req,res,next)=>{
