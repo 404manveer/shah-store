@@ -52,7 +52,7 @@ const Register = () => {
       </div>
 
       <Button className='text-white' type='submit' >login</Button>
-      <span className=' text-center ' >don't have account. <a href="/register" className='text-blue-800 underline  ' >Create now</a></span>
+      <span className=' text-center ' >don't have account. <a href="/auth/register" className='text-blue-800 underline  ' >Create now</a></span>
         
         
 

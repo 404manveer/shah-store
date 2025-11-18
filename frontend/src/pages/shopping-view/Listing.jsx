@@ -10,11 +10,21 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
 } from "../../components/ui/dropdown-menu";
+import {useDispatch,useSelector} from "react-redux"
+import { fetchshopingProducts, fetchShoppingProductDetail } from "../../store/actions/shoping/shopingProduct";
+import { ShoppingProductCard } from "../../components/shopping-view/product-title";
+import {  useSearchParams } from "react-router-dom";
+import ProductDetail from "../../components/shopping-view/productDetail";
+import { addTocartThunk } from "../../store/slices/shoping/cartItemSlice";
+import { toast } from "sonner";
 
 const listing = () => {
 
 const [sortby, setsortby] = useState("price-lowToHigh")
 const [filter, setfilter] = useState({})
+const [searchparams,setsearchparmas] = useSearchParams()
+const [openProductDetaialDialogbox,setOpenProdutcDetailDialogbox] = useState(false)
+
 
 
 const hanldefiltering = (key,value)=>{
@@ -30,43 +40,73 @@ const hanldefiltering = (key,value)=>{
  }
 setfilter(cpyfilter)
  sessionStorage.setItem("filter",JSON.stringify(cpyfilter))
- console.log("sdfsd",cpyfilter);
-
 }
 
+const createSerachParamsHelper=(filter)=>{
+
+  const querryparams = []
+  for( const [key,value] of Object.entries(filter) ){
+    if(Array.isArray(value) && value.length >0  ){
+      const paramsvalue = value.join(',')
+      querryparams.push(`${key}=${paramsvalue}`)
+
+    }
+  }
+  return querryparams.join('&')
+}
+
+const dispatch = useDispatch()
+
+const {ProductList,productDetail} = useSelector(state=>state.shopingProducts)
+const {user} = useSelector(state=>state.userReducer)
+
 useEffect(()=>{
-  setfilter(JSON.parse(sessionStorage.getItem("filter")))
+  const saved = sessionStorage.getItem('filter');
+  setfilter(saved? JSON.parse(saved):{})
 },[])
 
-// const hanldefiltering = (key,value)=>{
-//  let cpyfilter = {...filter}
-//  const currentkey = Object.keys(cpyfilter).indexOf(key)
-
-//  if(currentkey === -1){
-//   cpyfilter ={...cpyfilter,[key]:[value]}
-//  }else{
-//   const currentvalue = cpyfilter[key].indexOf(value)
-//  if(currentvalue=== -1){
-//   cpyfilter[key].push(value)
-//  }else{
-//   cpyfilter[key].splice(currentvalue,1)
-
-//  }
+useEffect(()=>{
+  if(filter && Object.keys(filter).length>0){
   
-  
-//  }
-//  setfilter(cpyfilter)
-//  sessionStorage.setItem("filter",JSON.stringify(cpyfilter))
-//  console.log(cpyfilter);
-// }
+    setsearchparmas( new URLSearchParams(createSerachParamsHelper(filter)))
+  }
+},[filter])
 
+useEffect(()=>{
+  dispatch(fetchshopingProducts({filter,sortby}))
+},[filter,sortby])
+
+useEffect(() => {
+ 
+  if (productDetail && Object.keys(productDetail).length > 0) {
+    setOpenProdutcDetailDialogbox(true);
+    
+  }
+}, [productDetail]);
+
+
+
+
+const showProductDetailHnadler = (id)=>{
+  dispatch(fetchShoppingProductDetail(id))
+ 
+}
+
+const addToCartHandler = async ( productId,quantity=1 )=>{  
+ const res = await dispatch(addTocartThunk({productId,quantity,userId:user.id}))
+if(res.payload.success){
+  toast.success(res.payload.message)
+  
+}
+
+}
 
 
   return (
     <section className="bg-slate-200 pt-24 pb-10 ">
       <div className="container  ">
-        <main className="grid grid-cols-1 md:grid-cols-[300px_1fr]  gap-4 mt-4  px-6  ">
-          <Filter filter={filter} hanldefiltering={hanldefiltering}   />
+        <main className="grid grid-cols-1 md:grid-cols-[180px_1fr]  gap-4 mt-4  px-6  ">
+          <Filter filter={filter} hanldefiltering={hanldefiltering} className=' sticky top-24 left-3 h-fit '   />
           <div className="    ">
             {/* all product bar */}
             <div className=" flex justify-between shadow-md p-4   ">
@@ -76,7 +116,7 @@ useEffect(()=>{
                 </h2>
               </div>
               <div className="flex items-center gap-4">
-                <span className=" text-md text-gray-500 ">10 products</span>
+                <span className=" text-md text-gray-500 ">{ProductList?.length} Produsts</span>
 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -85,12 +125,10 @@ useEffect(()=>{
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="left" className="w-[200px] bg-white  " >
-                    <DropdownMenuRadioGroup>
+                    <DropdownMenuRadioGroup value={sortby} onValueChange={setsortby} >
                       {sortoption.map((item) => (
-                        <DropdownMenuRadioItem onClick={()=>{setsortby(item.id) 
-                           console.log(item.id);
-                        }}  value={item.id} key={item.id} >
-                          {item.label}
+                        <DropdownMenuRadioItem   value={item?.id} key={item?.id} >
+                          {item?.label}
                         </DropdownMenuRadioItem>
                       ))}
                     </DropdownMenuRadioGroup>
@@ -100,12 +138,27 @@ useEffect(()=>{
             </div>
             {/* all product bar end */}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 mt-4 " >
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 mt-4 gap-8 " >   
+             {
+              ProductList?.map((item)=>{
+               return(
+                <>
+                 <ShoppingProductCard key={item.title}  product={item}  addToCartHandler={addToCartHandler}  showProductDetailHnadler={showProductDetailHnadler} />
+                </>
+               )
+
+              })
+              
+             }
+             
+              
 
             </div>
           </div>
         </main>
+      <ProductDetail open={openProductDetaialDialogbox} setopen={setOpenProdutcDetailDialogbox}  ProductDetails={productDetail} addToCartHandler={addToCartHandler} />
       </div>
+      
     </section>
   );
 };

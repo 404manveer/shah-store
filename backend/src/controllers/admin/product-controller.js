@@ -1,4 +1,4 @@
-const express = require('express');
+
 const { imageUploadCloudinary } = require('../../helpers/cloudinary');
 const productModel = require('../../models/admin/adminProduct');
 

@@ -1,8 +1,10 @@
 const express = require('express');
 const authRoutes = require('./routers/auth.routers');
-const adminproductImageupload = require('./routers/admin/product.router')
+const adminproduct = require('./routers/admin/product.router')
+const shopingproduct = require('./routers/shoping/product.router')
 const cors = require('cors')
 const cookieparser = require('cookie-parser')
+const cartRoutes = require('./routers/shoping/cart.router');
 
 
 const app = express();
@@ -22,7 +24,10 @@ app.use(cors({
 
  
 app.use('/api/auth',authRoutes)  
-app.use('/api/admin/product',adminproductImageupload) 
+app.use('/api/admin/product',adminproduct) 
+app.use('/api/shoping/product',shopingproduct) 
+app.use('/api/shoping/cart',cartRoutes)
+
 
 
 module.exports = app;  

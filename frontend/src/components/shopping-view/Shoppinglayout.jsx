@@ -7,7 +7,7 @@ export default function Shoppinglayout () {
   return (
   <section className='  ' >
     <Header/>
-    <main className='h-screen ' >
+    <main className=' ' >
         <Outlet/>
     </main>
 

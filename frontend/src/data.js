@@ -29,7 +29,7 @@ export const shopingViewHeaderMenuItems =[
 
 export const filterData={
     category:[
-        {id:"kid",label:"Kid"},
+        {id:"child",label:"child"},
         {id:"mem",label:"Men"},
         {id:"women",label:"Women"},
         {id:"footwear",label:"Foot Wear"},
@@ -49,6 +49,6 @@ export const filterData={
 export const sortoption =[
     {id:"price-lowToHigh",label:"Price low to High"},
     {id:"price-highToLow",label:"Price High to low"},
-    {id:"name-aToz",label:"Price a to z"},
-    {id:"price-zToa",label:"Price z to a"},
+    {id:"name-aToz",label:"Title a to z"},
+    {id:"name-zToa",label:"Title z to a"},
 ]
