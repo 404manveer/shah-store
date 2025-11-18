@@ -106,7 +106,9 @@ const cartItemSlice = createSlice({
         state.cartItems = [];
       })
       .addCase(addTocartThunk.fulfilled, (state, action) => {
-        state.cartItems = action.payload.response;
+        // state.cartItems = action.payload.response;
+        console.log("addtocart thunk>>",action.payload.response);
+        
         state.isloading = false;
       })
       .addCase(addTocartThunk.rejected,(state,action)=>{
@@ -119,8 +121,6 @@ const cartItemSlice = createSlice({
       })
       .addCase(getCartItemsThunk.fulfilled, (state, action) => {
         state.cartItems = action.payload;      
-        console.log(action.payload,"getCartItemsThunk.fulfilled>>>>>");
-        
         state.isloading = false;
       })
       .addCase(getCartItemsThunk.rejected,(state,action)=>{

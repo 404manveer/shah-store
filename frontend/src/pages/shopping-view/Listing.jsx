@@ -94,6 +94,8 @@ const showProductDetailHnadler = (id)=>{
 
 const addToCartHandler = async ( productId,quantity=1 )=>{  
  const res = await dispatch(addTocartThunk({productId,quantity,userId:user.id}))
+ console.log("addtocartHandler");
+ 
 if(res.payload.success){
   toast.success(res.payload.message)
   

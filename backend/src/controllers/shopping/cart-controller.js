@@ -47,11 +47,17 @@ const addToCart = async (req, res) => {
         }
         await cart.save();
     }
+    const populatedCart = await cart.findOne ({userId}).populate({ 
+
+      path:'items.productId',
+      select:'name price description image title', 
+    }
+    )      
 
     return res.status(200).json({
         success:true,
         message:"item added to cart successfully",
-        resposense:cart
+        resposense:populatedCart
     })
 
   } catch (error) {

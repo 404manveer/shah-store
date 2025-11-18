@@ -54,11 +54,15 @@ function HeaderRightContent() {
 
   useEffect(()=>{
     dispatch(getCartItemsThunk({ userId: user?.id }));
-  },[cartItems])
+  },[dispatch]);
+  console.log(cartItems,"hearders>>>>>>" );
+  
+
+  
 
   return (
     <div className=" flex flex-col lg:items-center lg:flex-row gap-4 ">
-      <CartComponents cart={cartItems}  />
+      <CartComponents  cart={cartItems}  />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar className=" bg-black text-white  font-semibold font-serif text-xl flex items-center justify-center uppercase  ">
@@ -93,13 +97,11 @@ function HeaderRightContent() {
 export const Header = () => {
   const { isAuthenticate, user } = useSelector((state) => state.userReducer);
   const id = user?.id;
-
-  const { cartItems } = useSelector((state) => state.cartItems);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (id) dispatch(getCartItemsThunk({ userId: id }));
-  }, [id, dispatch]);
+  },[dispatch]);
 
   return (
     <header className="w-full max-w-7xl z-50 fixed left-1/2 -translate-x-1/2 rounded-full  top-6 bg-white/20 backdrop-blur-md border border-white/20 py-4 px-8   mx-auto h-16 shadow-md flex items-center justify-between  ">
