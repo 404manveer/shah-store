@@ -14,7 +14,7 @@ const addToCart = async (req, res) => {
     }
     
     const product = await Product.findOne({ _id:productId});
-    console.log(product,"product>>>>>>>");
+   
     
     
     if (!product) {
@@ -52,12 +52,15 @@ const addToCart = async (req, res) => {
       path:'items.productId',
       select:'name price description image title', 
     }
-    )      
+    )    
+    console.log(cart,'a populatedCart');
+    console.log(cart,'a cart');
+      
 
     return res.status(200).json({
         success:true,
         message:"item added to cart successfully",
-        resposense:populatedCart
+        resposense:cart
     })
 
   } catch (error) {
