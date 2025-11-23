@@ -115,8 +115,8 @@ if(res.payload.success){
 
 
   return (
-    <section className="bg-slate-200 pt-24 pb-10 ">
-      <div className="container  ">
+    <section className="container bg-slate-200 pt-24 pb-10 ">
+      <div className="  ">
         <main className="grid grid-cols-1 md:grid-cols-[180px_1fr]  gap-4 mt-4  px-6  ">
           <Filter filter={filter} hanldefiltering={hanldefiltering} className=' sticky top-24 left-3 h-fit '   />
           <div className="    ">

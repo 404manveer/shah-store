@@ -56,9 +56,6 @@ function HeaderRightContent() {
     dispatch(getCartItemsThunk({ userId: user?.id }));
   },[dispatch]);
   console.log(cartItems,"hearders>>>>>>" );
-  
-
-  
 
   return (
     <div className=" flex flex-col lg:items-center lg:flex-row gap-4 ">

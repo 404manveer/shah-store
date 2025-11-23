@@ -12,7 +12,7 @@ const shopingProductSlice = createSlice({
   initialState,
   reducers: {
     productListCleaner:(state)=>{
-      state.productDetail = {}
+      state.productDetail = null
     }
 
   },
@@ -37,11 +37,8 @@ const shopingProductSlice = createSlice({
         state.isProductloading = true;
       })
       .addCase(fetchShoppingProductDetail.fulfilled, (state, action) => {
-       
-
         state.isProductloading = false;
         state.productDetail = action?.payload?.response;
-        
       })
       .addCase(fetchShoppingProductDetail.rejected, (state) => {
         state.isProductloading = true;
