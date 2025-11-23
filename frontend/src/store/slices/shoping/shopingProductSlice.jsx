@@ -10,7 +10,12 @@ const initialState = {
 const shopingProductSlice = createSlice({
   name: "ProductList",
   initialState,
-  reducers: {},
+  reducers: {
+    productListCleaner:(state)=>{
+      state.productDetail = {}
+    }
+
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchshopingProducts.pending, (state) => {
@@ -45,4 +50,5 @@ const shopingProductSlice = createSlice({
   },
 });
 
+export const {productListCleaner} = shopingProductSlice.actions
 export default shopingProductSlice.reducer

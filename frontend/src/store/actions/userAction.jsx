@@ -56,16 +56,8 @@ export const checkauth = createAsyncThunk(
   "user/checkauth",
   async()=>{
     try {
-      const res = await api.get("/api/auth/check-auth",{
-        withCredentials:true,
-        // headers:{
-        //   "cache-control":"no-store,on-cache,proxy-revalidate,must-revalidate"
-        // }
-      });
-      return res.data
-
-      
-      
+      const res = await api.get("/api/auth/check-auth");
+      return res.data;
     } catch (error) {
       console.log("error from checkuath action from useraction",error);
       

@@ -73,10 +73,10 @@ export const updateCartItemsThunk = createAsyncThunk(
 export const deleteCartItemsThunk = createAsyncThunk(
   "cartItem/delete",
   async ({ productId, userId }) => {
+    console.log("deleteCartItemsThunk",productId,userId);
+    
     try {
-      const res1 = await api.delete(`/api/shoping/cart/delete-item`, {
-        params: { productId, userId },
-      });
+      const res1 = await api.delete(`/api/shoping/cart/${productId}/${userId}/delete`,);
       const res = res1.data;
       return {
         success: res.success,
@@ -106,9 +106,7 @@ const cartItemSlice = createSlice({
         state.cartItems = [];
       })
       .addCase(addTocartThunk.fulfilled, (state, action) => {
-        // state.cartItems = action.payload.response;
-        console.log("addtocart thunk>>",action.payload.response);
-        
+        state.cartItems = action?.payload?.response?.response;    
         state.isloading = false;
       })
       .addCase(addTocartThunk.rejected,(state,action)=>{

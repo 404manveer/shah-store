@@ -17,8 +17,9 @@ import {  useSearchParams } from "react-router-dom";
 import ProductDetail from "../../components/shopping-view/productDetail";
 import { addTocartThunk } from "../../store/slices/shoping/cartItemSlice";
 import { toast } from "sonner";
+import { productListCleaner } from "../../store/slices/shoping/shopingProductSlice";
 
-const listing = () => {
+const Listing = () => {
 
 const [sortby, setsortby] = useState("price-lowToHigh")
 const [filter, setfilter] = useState({})
@@ -83,6 +84,15 @@ useEffect(() => {
     
   }
 }, [productDetail]);
+useEffect(()=>{
+  if(!openProductDetaialDialogbox){
+    dispatch(productListCleaner())
+  }
+},[openProductDetaialDialogbox])
+
+
+
+
 
 
 
@@ -144,9 +154,8 @@ if(res.payload.success){
              {
               ProductList?.map((item)=>{
                return(
-                <>
                  <ShoppingProductCard key={item.title}  product={item}  addToCartHandler={addToCartHandler}  showProductDetailHnadler={showProductDetailHnadler} />
-                </>
+            
                )
 
               })
@@ -165,6 +174,6 @@ if(res.payload.success){
   );
 };
 
-export default listing;
+export default Listing;
 
 

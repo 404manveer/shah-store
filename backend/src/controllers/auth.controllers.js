@@ -48,12 +48,11 @@ const userlogin = async (req, res) => {
         username: existuser.username,
         email: existuser.email,
         id:existuser._id,
+        role:existuser.role
       },
       process.env.JWT_KEY,
       { expiresIn: "60m" }
     );
-    console.log("Generated token:", token);
-
     res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "Lax",maxAge: 60 * 60 * 1000,   }).json({
       success: true,
       message: "Logged in succesfully",

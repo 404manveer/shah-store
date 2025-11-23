@@ -47,20 +47,24 @@ const addToCart = async (req, res) => {
         }
         await cart.save();
     }
-    const populatedCart = await cart.findOne ({userId}).populate({ 
+    const populatedCart = await Cart.findOne({userId}).populate({ 
 
       path:'items.productId',
       select:'name price description image title', 
     }
     )    
-    console.log(cart,'a populatedCart');
-    console.log(cart,'a cart');
+
+    const setformatecart = populatedCart?.items.map(item=>({
+product:item.productId,
+quantity:item.quantity
+    }))
+  
       
 
     return res.status(200).json({
         success:true,
         message:"item added to cart successfully",
-        resposense:cart
+        response:setformatecart
     })
 
   } catch (error) {
@@ -73,36 +77,74 @@ const addToCart = async (req, res) => {
 
 const updateCartItemQty = async (req, res) => {
   try {
-     const { productId, userId, quantity } = req.body;
-    if (!productId || !userId || !quantity) {
+    const { productId, userId, quantity } = req.body;
+
+    // Validate presence
+    if (!productId || !userId || quantity === undefined) {
       return res.status(400).json({
         success: false,
         message: "Missing required fields",
       });
     }
 
-    const cart = await Cart.findOne({userId});
-    if(!cart){
-        return res.status(404).json({
-            success:false,
-            message:"cart not found"
-        })
+    // Validate quantity
+    const changeQty = parseInt(quantity, 10);
+    if (isNaN(changeQty) || changeQty === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Quantity must be a non-zero number",
+      });
     }
-    const itemIndex = cart.items.findIndex(item => item.productId.toString() == productId);
-    if(itemIndex === -1){
-        return res.status(404).json({
-            success:false,
-            message:"item not found in cart"
-        })
+
+    const cart = await Cart.findOne({ userId });
+    if (!cart) {
+      return res.status(404).json({
+        success: false,
+        message: "cart not found",
+      });
     }
-    cart.items[itemIndex].quantity += quantity;
+
+    const itemIndex = cart.items.findIndex(
+      (item) => item.productId.toString() === productId
+    );
+
+    if (itemIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        message: "item not found in cart",
+      });
+    }
+
+    // New quantity
+    const updatedQty =
+      cart.items[itemIndex].quantity + changeQty;
+
+    if (updatedQty <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: "quantity cannot go below 1",
+      });
+    }
+
+    cart.items[itemIndex].quantity = updatedQty;
+
     await cart.save();
+
+    await cart.populate({
+      path: "items.productId",
+      select: "name price description image title",
+    });
+
+    const formatted = cart.items.map((item) => ({
+      product: item.productId,
+      quantity: item.quantity,
+    }));
+
     return res.status(200).json({
-        success:true,
-        message:"cart item quantity updated successfully",
-        response:cart
-    })
-    
+      success: true,
+      message: "cart item quantity updated successfully",
+      response: formatted,
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -110,38 +152,56 @@ const updateCartItemQty = async (req, res) => {
     });
   }
 };
+
 
 const deleteCartItem = async (req, res) => {
   try {
-    const {productId, userId} = req.params;
-    if(!productId || !userId){
-        return res.status(400).json({
-            success:false,
-            message:"missing required fields"
-        })
-    } 
-    const cart = await Cart.findOne({userId});
-    if(!cart){
-        return res.status(404).json({
-            success:false,
-            message:"cart not found"
-        })
-    } 
-    const itemIndex = cart.items.findIndex(item => item.productId == productId);
-    if(itemIndex === -1){
-        return res.status(404).json({
-            success:false,
-            message:"item not found in cart"
-        })
-    }
-    cart.items.splice(itemIndex,1);
-    await cart.save();
-    return res.status(200).json({
-        success:true,
-        message:"item removed from cart successfully",
-        response:cart
-    })
+    const { productId, userId } = req.params;
 
+    if (!productId || !userId) {
+      return res.status(400).json({
+        success: false,
+        message: "missing required fields",
+      });
+    }
+
+    const cart = await Cart.findOne({ userId });
+    if (!cart) {
+      return res.status(404).json({
+        success: false,
+        message: "cart not found",
+      });
+    }
+
+    const itemIndex = cart.items.findIndex(
+      item => item.productId.toString() === productId
+    );
+
+    if (itemIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        message: "item not found in cart",
+      });
+    }
+
+    cart.items.splice(itemIndex, 1);
+    await cart.save();
+
+    await cart.populate({
+      path: "items.productId",
+      select: "name price description image title",
+    });
+
+    const formatted = cart.items.map(item => ({
+      product: item.productId,
+      quantity: item.quantity,
+    }));
+
+    return res.status(200).json({
+      success: true,
+      message: "item removed from cart successfully",
+      response: formatted,
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -149,6 +209,7 @@ const deleteCartItem = async (req, res) => {
     });
   }
 };
+
 
 const fetchCartItem = async (req, res) => {
   try {
